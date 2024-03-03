@@ -1,3 +1,5 @@
+using System.Xml.XPath;
+
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -39,7 +41,25 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+
+        // Initialize an empty list to hold the multiples
+        List<double> multiplesList = new List<double>();
+
+        // Loop through the range from 1 to the given length
+        for (int i = 1; i <= length; i++)
+        {
+            //Calculate the multiple by multiplying the number by the current index
+            double multiple = number * i;
+
+            //Add the calculated multiple to the list
+            multiplesList.Add(multiple);
+        }
+
+       //return new double[0]; // replace this return statement with your own
+       return multiplesList.ToArray();
+       
+
+
     }
     
     /// <summary>
@@ -57,5 +77,26 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+
+        // Handle edge cases
+        if (data.Count == 0 || amount == 0 || amount == data.Count)
+            return;
+
+        //Calculate actual rotationt amount
+        int rotationAmount = amount % data.Count;
+
+        // Create sublist of the last 'rotationAmoun' elements
+        List<int> sublist = data.GetRange(data.Count - rotationAmount, rotationAmount);
+
+        // Remove sublist from original list
+        data.RemoveRange(data.Count - rotationAmount, rotationAmount);
+
+        // Insert sublist at the beginning of the original list
+        data.InsertRange(0, sublist);
+
     }
 }
+
+
+
+

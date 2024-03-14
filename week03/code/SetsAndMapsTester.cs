@@ -1,3 +1,6 @@
+
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 public static class SetsAndMapsTester {
@@ -89,6 +92,7 @@ public static class SetsAndMapsTester {
         // 4km SW of Volcano, Hawaii - Mag 1.99
     }
 
+
     /// <summary>
     /// The words parameter contains a list of two character 
     /// words (lower case, no duplicates). Using sets, find an O(n) 
@@ -111,7 +115,25 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        HashSet<string> wordSet = new HashSet<string>();
+
+        foreach (string word in words) {
+            string reverse = ReverseWord(word);
+
+            if (wordSet.Contains(reverse)) {
+                Console.WriteLine($"{word} & {reverse}");
+                } 
+                wordSet.Add(word);
+        }
+
+   
     }
+     private static string ReverseWord (string word) {
+            char[] chars = word.ToCharArray();
+            Array.Reverse(chars);
+            return new string(chars);
+        }
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -132,6 +154,14 @@ public static class SetsAndMapsTester {
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length >= 4) {
+                string degree = fields[3].Trim();
+                if (degrees.ContainsKey(degree)) {
+                    degrees[degree]++;
+                } else {
+                    degrees[degree] = 1;
+                }
+            }
         }
 
         return degrees;
@@ -158,7 +188,39 @@ public static class SetsAndMapsTester {
     /// #############
     private static bool IsAnagram(string word1, string word2) {
         // Todo Problem 3 - ADD YOUR CODE HERE
+        word1 = word1.Replace(" ", " ").ToLower();
+        word2 = word2.Replace(" ", " ").ToLower();
+        
+        if (word1.Length != word2.Length)
         return false;
+
+        //create the dictionaries
+        Dictionary<char, int> freq1 = new Dictionary<char, int>();
+        Dictionary<char, int> freq2 = new Dictionary<char, int>();
+
+        //frequencies for word1
+        foreach (char c in word1) {
+            if (freq1.ContainsKey(c))
+                freq1[c]++;
+            else
+                freq1[c] = 1;
+        }
+
+        // frequencies for word2
+        foreach (char c in word2) {
+            if (freq2.ContainsKey(c))
+                freq2[c]++;
+            else
+                freq2[c] = 1;
+        }
+
+        foreach (var kvp in freq1) {
+            if (!freq2.ContainsKey(kvp.Key) || freq2[kvp.Key] != kvp.Value)
+                return false;
+        }
+        
+        return true;
+
     }
 
     /// <summary>
@@ -203,8 +265,67 @@ public static class SetsAndMapsTester {
             { (6, 5), new[] { false, false, false, false } },
             { (6, 6), new[] { true, false, false, false } }
         };
+
         return map;
+
     }
+    public class Maze {
+        private Dictionary<(int, int), bool[]> _map; 
+        private (int, int) _currentPosition;
+        public Maze(Dictionary<(int, int), bool[]> map) {
+            _map = map;
+            _currentPosition = (1, 1); 
+    }
+    
+
+        public void MoveLeft() {
+
+            var newPosition = (_currentPosition.Item1, _currentPosition.Item2 - 1);
+            if (_map.ContainsKey(newPosition) && _map[newPosition][1]) {
+                _currentPosition = newPosition;
+                Console.WriteLine("Moved left.");
+            } else {
+                Console.WriteLine("Cannot move left.");
+            }
+        }
+
+        public void MoveRight() {
+            var newPosition = (_currentPosition.Item1, _currentPosition.Item2 + 1);
+            if (_map.ContainsKey(newPosition) && _map[newPosition][0]) {
+                _currentPosition = newPosition;
+                Console.WriteLine("Moved right.");
+            } else {
+                Console.WriteLine("Cannot move right.");
+            }
+        }
+
+        public void MoveUp() {
+            var newPosition = (_currentPosition.Item1 - 1, _currentPosition.Item2);
+            if (_map.ContainsKey(newPosition) && _map[newPosition][3]) {
+                _currentPosition = newPosition;
+                Console.WriteLine("Moved up.");
+            } else {
+                Console.WriteLine("Cannot move up.");
+            }
+        }
+
+        public void MoveDown() {
+            var newPosition = (_currentPosition.Item1 + 1, _currentPosition.Item2);
+            if (_map.ContainsKey(newPosition) && _map[newPosition][2]) {
+                _currentPosition = newPosition;
+                Console.WriteLine("Moved down.");
+            } else {
+                Console.WriteLine("Cannot move down.");
+            }
+        
+        }
+
+    }
+        
+
+       
+    
+    
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
@@ -235,5 +356,16 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+
+        // Print out each earthquake location 
+        Console.WriteLine("\n=========== Earthquake TESTS ===========");
+        foreach (var feature in featureCollection.features)
+        {
+            Console.WriteLine($"{feature.properties.place} - Mag {feature.properties.mag}");
+        }
+    }  
+
     }
-}
+
+
+

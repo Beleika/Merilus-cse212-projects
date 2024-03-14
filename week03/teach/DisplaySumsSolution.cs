@@ -33,16 +33,26 @@
      */
     private static void DisplaySumPairs(int[] numbers)
     {
-        var valuesSeen = new HashSet<int>();
-        foreach (var n in numbers)
-        {
+       
+       HashSet<int> Set = new HashSet<int>();
+    foreach (int num in numbers) {
+        int complement = 10 - num;
+        if (Set.Contains(complement)) {
+            Console.WriteLine($"{num} {complement}");
+        }
+        Set.Add(num);
+        
+    }
+       
+        //var valuesSeen = new HashSet<int>();
+       // foreach (var n in numbers)
+        //{
             // If 10-n is in the values_seen set then I know that
             // I have previously seen a number that will sum with n 
             // to equal 10. Print out that pair
-            if (valuesSeen.Contains(10 - n))
-                Console.WriteLine($"{n} {10-n}");
+           // if (valuesSeen.Contains(10 - n))
+            //    Console.WriteLine($"{n} {10-n}");
             // Add this number to the values_seen set
-            valuesSeen.Add(n);
+          //  valuesSeen.Add(n);
         }
     }
-}

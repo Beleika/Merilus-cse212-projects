@@ -31,3 +31,15 @@
         // TODO Problem 2 - This should print pairs of numbers in the given array
     }
 }
+
+private static void DisplaySumPairs(int[] numbers) {
+    HashSet<int> numSet = new HashSet<int>();
+
+    foreach (int num in numbers) {
+        int complement = 10 - num;
+        if (numSet.Contains(complement)) {
+            Console.WriteLine($"{num} {complement}");
+        }
+        numSet.Add(num);
+    }
+}

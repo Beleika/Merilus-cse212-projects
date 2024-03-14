@@ -1,5 +1,93 @@
 ﻿using System.Collections;
 
+
+public class TakingTurnsQueue {
+    private Queue<(string, int)> queue;
+
+    public TakingTurnsQueue() {
+        queue = new Queue<(string, int)>();
+    }
+
+    public bool GetNextPerson(out string person) {
+        if (queue.Count == 0) {
+            Console.WriteLine("Error: Queue is empty");
+            person = null;
+            return false;
+        }
+
+        var (name, turns) = queue.Dequeue();
+        person = name;
+        if (turns > 0) {
+            turns--;
+            queue.Enqueue((name, turns));
+        } else if (turns <= 0) {
+            queue.Enqueue((name, turns));
+        }
+        return true;
+    }
+}
+
+public static class TakingTurns {
+    public static void Test() {
+        Console.WriteLine("Test 1");
+        var players = new TakingTurnsQueue();
+        players.AddPerson("Bob", 2);
+        players.AddPerson("Tim", 5);
+        players.AddPerson("Sue", 3);
+        string person;
+        while (players.GetNextPerson(out person)) {
+            
+            Console.WriteLine(person);
+        }
+
+        Console.WriteLine("---------");
+
+        Console.WriteLine("Test 2");
+        players = new TakingTurnsQueue();
+        players.AddPerson("Bob", 2);
+        players.AddPerson("Tim", 5);
+        players.AddPerson("Sue", 3);
+        for (int i = 0; i < 5; i++) {
+            players.GetNextPerson(out string p);
+            Console.WriteLine(p);
+        }
+
+        players.AddPerson("George", 3);
+        while (players.GetNextPerson(out string p2)) {
+            Console.WriteLine(p2); 
+        }
+
+        Console.WriteLine("---------");
+
+        Console.WriteLine("Test 3");
+        players = new TakingTurnsQueue();
+        players.AddPerson("Bob", 2);
+        players.AddPerson("Tim", 0);
+        players.AddPerson("Sue", 3);
+        players.AddPerson("Tim", -1); 
+        for (int i = 0; i < 10; i++) {
+            players.GetNextPerson(out string p);
+        }
+
+        Console.WriteLine("---------");
+
+        Console.WriteLine("Test 4");
+        players = new TakingTurnsQueue();
+        players.AddPerson("Tim", -3);
+        players.AddPerson("Sue", 3);
+        players.AddPerson("Tim", -1); 
+        for (int i = 0; i < 10; i++) {
+            players.GetNextPerson(out string p);
+        }
+
+        Console.WriteLine("---------");
+
+        Console.WriteLine("Test 5");
+        players = new TakingTurnsQueue();
+        players.GetNextPerson();
+
+    }
+}
 public static class TakingTurns {
     public static void Test() {
         // TODO Problem 1 - Run test cases and fix the code to match requirements
@@ -112,7 +200,9 @@ public static class TakingTurns {
         // Expected Result: Error message should be displayed
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
-        players.GetNextPerson();
+        players.GetNextPerson(out string p3);
+        Console.WriteLine("---------");
+        
         // Defect(s) Found:
         
 

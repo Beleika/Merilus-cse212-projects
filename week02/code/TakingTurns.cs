@@ -1,97 +1,13 @@
-﻿using System.Collections;
-
-
-public class TakingTurnsQueue {
-    private Queue<(string, int)> queue;
-
-    public TakingTurnsQueue() {
-        queue = new Queue<(string, int)>();
-    }
-
-    public bool GetNextPerson(out string person) {
-        if (queue.Count == 0) {
-            Console.WriteLine("Error: Queue is empty");
-            person = null;
-            return false;
-        }
-
-        var (name, turns) = queue.Dequeue();
-        person = name;
-        if (turns > 0) {
-            turns--;
-            queue.Enqueue((name, turns));
-        } else if (turns <= 0) {
-            queue.Enqueue((name, turns));
-        }
-        return true;
-    }
-}
-
-public static class TakingTurns {
-    public static void Test() {
-        Console.WriteLine("Test 1");
-        var players = new TakingTurnsQueue();
-        players.AddPerson("Bob", 2);
-        players.AddPerson("Tim", 5);
-        players.AddPerson("Sue", 3);
-        string person;
-        while (players.GetNextPerson(out person)) {
-            
-            Console.WriteLine(person);
-        }
-
-        Console.WriteLine("---------");
-
-        Console.WriteLine("Test 2");
-        players = new TakingTurnsQueue();
-        players.AddPerson("Bob", 2);
-        players.AddPerson("Tim", 5);
-        players.AddPerson("Sue", 3);
-        for (int i = 0; i < 5; i++) {
-            players.GetNextPerson(out string p);
-            Console.WriteLine(p);
-        }
-
-        players.AddPerson("George", 3);
-        while (players.GetNextPerson(out string p2)) {
-            Console.WriteLine(p2); 
-        }
-
-        Console.WriteLine("---------");
-
-        Console.WriteLine("Test 3");
-        players = new TakingTurnsQueue();
-        players.AddPerson("Bob", 2);
-        players.AddPerson("Tim", 0);
-        players.AddPerson("Sue", 3);
-        players.AddPerson("Tim", -1); 
-        for (int i = 0; i < 10; i++) {
-            players.GetNextPerson(out string p);
-        }
-
-        Console.WriteLine("---------");
-
-        Console.WriteLine("Test 4");
-        players = new TakingTurnsQueue();
-        players.AddPerson("Tim", -3);
-        players.AddPerson("Sue", 3);
-        players.AddPerson("Tim", -1); 
-        for (int i = 0; i < 10; i++) {
-            players.GetNextPerson(out string p);
-        }
-
-        Console.WriteLine("---------");
-
-        Console.WriteLine("Test 5");
-        players = new TakingTurnsQueue();
-        players.GetNextPerson();
-
-    }
-}
-public static class TakingTurns {
+﻿public static class TakingTurns {
     public static void Test() {
         // TODO Problem 1 - Run test cases and fix the code to match requirements
         // Test Cases
+        // Test 1:Defect(s) Found: The turns are not being decremented correctly. Tim's turn should be decremented by 1 each time, but it's not happening.
+        //Test 2:Defect(s) Found: turns are not decremented correctly.
+        //Test 3: Defect(s) Found: Tim's turns are not being handled correctly. He should continue in the queue even after his turn, but he's not.
+        //Test 4:Defect(s) Found: Similar to Test 3, Tim's turns are not being handled correctly.
+        //Test 5:Defect(s) Found: No error message is displayed when trying to dequeue from an empty queue.
+
 
         // Test 1
         // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
@@ -102,23 +18,12 @@ public static class TakingTurns {
         players.AddPerson("Bob", 2);
         players.AddPerson("Tim", 5);
         players.AddPerson("Sue", 3);
-        string person;
         // Console.WriteLine(players);    // This can be un-commented out for debug help
-        while (players.GetNextPerson(out person)) {
-            Console.WriteLine(person);
-        }    
-        
-        // Defect(s) Found:
-
-
-         
-        //The error :The "Bob" person is not re-added to the queue after getting dequeued.
-        //Expected Result :Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-       
-           
+        while (players.Length > 0)
+            players.GetNextPerson();
+        // Defect(s) Found: 
 
         Console.WriteLine("---------");
-       
 
         // Test 2
         // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
@@ -130,28 +35,18 @@ public static class TakingTurns {
         players.AddPerson("Tim", 5);
         players.AddPerson("Sue", 3);
         for (int i = 0; i < 5; i++) {
-            players.GetNextPerson(out string p);
-            Console.WriteLine(p);
+            players.GetNextPerson();
             // Console.WriteLine(players);
         }
 
         players.AddPerson("George", 3);
         // Console.WriteLine(players);
-        while (players.GetNextPerson(out string p2)) {
-            Console.WriteLine(p2); 
-        }
-           
+        while (players.Length > 0)
+            players.GetNextPerson();
 
         // Defect(s) Found: 
 
-       
-
         Console.WriteLine("---------");
-
-        //After adding George, the queue doesn't maintain turns properly.
-        //Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-
-    
 
         // Test 3
         // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
@@ -162,7 +57,6 @@ public static class TakingTurns {
         players.AddPerson("Bob", 2);
         players.AddPerson("Tim", 0);
         players.AddPerson("Sue", 3);
-        players.AddPerson("Tim", -1); 
         // Console.WriteLine(players);
         for (int i = 0; i < 10; i++) {
             players.GetNextPerson();
@@ -171,8 +65,6 @@ public static class TakingTurns {
         // Defect(s) Found: 
 
         Console.WriteLine("---------");
-        //"Tim" with infinite turns (0) is not correctly handling, and it should be re-added to the queue.
-        //Expected Result:Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
 
          // Test 4
         // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
@@ -182,7 +74,6 @@ public static class TakingTurns {
         players = new TakingTurnsQueue();
         players.AddPerson("Tim", -3);
         players.AddPerson("Sue", 3);
-        players.AddPerson("Tim", -1); 
         // Console.WriteLine(players);
         for (int i = 0; i < 10; i++) {
             players.GetNextPerson();
@@ -191,25 +82,13 @@ public static class TakingTurns {
         // Defect(s) Found: 
 
         Console.WriteLine("---------");
-        //The handling of a person with infinite turns (-3) is not correct, and it should be re-added to the queue.
-        //Expected Result:Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-        //
 
         // Test 5
         // Scenario: Try to get the next person from an empty queue
         // Expected Result: Error message should be displayed
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
-        players.GetNextPerson(out string p3);
-        Console.WriteLine("---------");
-        
+        players.GetNextPerson();
         // Defect(s) Found:
-        
-
-        //No error handling for attempting to get the next person from an empty queue.
-
-        
     }
-
 }
-

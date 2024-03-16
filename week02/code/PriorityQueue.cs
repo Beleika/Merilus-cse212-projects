@@ -1,5 +1,5 @@
 ﻿public class PriorityQueue {
-    private List<PriorityItem> _queue = new List<PriorityItem>();
+    private List<PriorityItem> _queue = new();
 
     /// <summary>
     /// Add a new value to the queue with an associated priority.  The
@@ -48,26 +48,5 @@ internal class PriorityItem {
 
     public override string ToString() {
         return $"{Value} (Pri:{Priority})";
-    }
-}
-public class PriorityTests {
-    public void TestEnqueueAndDequeue() {
-        // Test Enqueue and Dequeue
-        PriorityQueue priorityQueue = new PriorityQueue();
-        priorityQueue.Enqueue("A", 3);
-        priorityQueue.Enqueue("B", 2);
-        priorityQueue.Enqueue("C", 4);
-        priorityQueue.Enqueue("D", 1);
-        Console.WriteLine($"Expected Output: C, Actual Output: {priorityQueue.Dequeue()}");
-
-        // Test multiple items with same highest priority
-        priorityQueue.Enqueue("E", 4);
-        priorityQueue.Enqueue("F", 4);
-        Console.WriteLine($"Expected Output: E, Actual Output: {priorityQueue.Dequeue()}");
-        Console.WriteLine($"Expected Output: F, Actual Output: {priorityQueue.Dequeue()}");
-
-        // Test Dequeue when queue is empty
-        Console.WriteLine("Expected Output: The queue is empty.");
-        Console.WriteLine($"Actual Output: {priorityQueue.Dequeue()}");
     }
 }

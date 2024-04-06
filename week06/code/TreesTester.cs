@@ -12,11 +12,13 @@ public static class TreesTester {
         // After implementing 'no duplicates' rule,
         // this next insert will have no effect on the tree.
         // TODO Problem 1
+        if (number == node);
         tree.Insert(7);
         tree.Insert(4);
         tree.Insert(10);
         tree.Insert(1);
         tree.Insert(6);
+        
         Console.WriteLine(tree.ToString()); // 1, 3, 4, 5, 6, 7, 10
 
         Console.WriteLine("\n=========== PROBLEM 2 TESTS ===========");
@@ -98,5 +100,11 @@ public static class TreesTester {
     /// <param name="bst">the BinarySearchTree in which to insert the values</param>
     private static void InsertMiddle(int[] sortedNumbers, int first, int last, BinarySearchTree bst) {
         // TODO Start Problem 5
+        if (first <= last) {
+            int mid = (first + last) / 2;
+            bst.Insert(sortedNumbers[mid]);
+            InsertMiddle(sortedNumbers, first, mid - 1, bst);
+            InsertMiddle(sortedNumbers, mid + 1, last, bst);
+        }
     }
 }
